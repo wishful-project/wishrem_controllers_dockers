@@ -1,0 +1,20 @@
+{
+"devices": 
+	{
+		"c8:3a:35:c6:6f:ed" : { "coordinates" : [1.1, 1.1, 1.1], "floor" : 0, "global_loc_name" : "UKIMtest" },
+		"c8:3a:35:c6:6f:e6" : { "coordinates" : [2.2, 2.2, 2.2], "floor" : 1, "global_loc_name" : "UKIMtest" },
+		"b8:ae:ed:75:21:e5" : { "coordinates" : [8.08, 15.2, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"04:f0:21:14:cd:97" : { "coordinates" : [16.74, 15.2, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"74:f0:6d:4e:84:52" : { "coordinates" : [16.84, 15.3, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"b8:ae:ed:75:21:e4" : { "coordinates" : [4.98, 0.7, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"b8:ae:ed:75:29:00" : { "coordinates" : [14.3, 0.7, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"04:f0:21:14:c6:21" : { "coordinates" : [17.39, 0.7, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"48:5d:60:77:86:72" : { "coordinates" : [17.49, 0.8, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" },
+		"b8:ae:ed:75:21:9a" : { "coordinates" : [20.47, 0.7, 10.79], "floor" : 3, "global_loc_name" : "TUBtest" }
+	},
+"global_locations": 
+	{	
+		"TUBtest" : { "coordinates" : [52.5158273, 13.3256473, 0.0] },
+		"UKIMtest" : { "coordinates" : [42.004741, 21.408597, 0.0] }
+	}
+}

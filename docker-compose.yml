@@ -1,0 +1,87 @@
+version: '2'
+
+services:
+  database:
+    container_name: wishrem_mysql
+    build: ./db
+    environment:
+     - MYSQL_ROOT_PASSWORD=rem
+    expose: 
+     - "3306"
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.5
+
+  controller_init:
+    container_name: wishrem_init
+    build: ./init_device_locations
+    environment:
+     - MYSQL_ENV=database
+    depends_on:
+     - "database"
+    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "python3", "init_devices.py"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.6
+
+  controller_rem:
+    container_name: wishrem_rem
+    build: ./rem_console
+    environment:
+     - MYSQL_ENV=database
+    depends_on:
+     - "database"
+    stdin_open: true
+    tty: true
+    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "/bin/bash", "-c", "tail -f /dev/null"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.7
+
+  controller_nodes:
+    container_name: wishrem_nodes
+    build: ./node_controller
+    environment:
+     - MYSQL_ENV=database
+    depends_on:
+     - "database"
+    stdin_open: true
+    tty: true
+    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "/bin/bash", "-c", "tail -f /dev/null"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.3
+
+  controller_rrm:
+    container_name: wishrem_rrm
+    build: ./rrm_controller
+    environment:
+     - MYSQL_ENV=database
+    depends_on:
+     - "database"
+    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "uniflex-agent", "--config", "/app/config_rrm.yaml"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.4
+
+  broker:
+    container_name: wishrem_broker
+    image: uniflex/broker
+    ports:
+     - "8989:8989"
+     - "8990:8990"
+    expose:
+     - "8989"
+     - "8990"
+    command: ["uniflex-broker", "--xpub", "tcp://0.0.0.0:8990", "--xsub", "tcp://0.0.0.0:8989"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.2
+
+networks:
+  wishrem:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1

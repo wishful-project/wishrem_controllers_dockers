@@ -1,0 +1,5 @@
+git+https://github.com/uniflex/uniflex
+git+https://github.com/wishful-project/pyre
+git+https://github.com/uniflex/app_discovery_pyre
+git+https://github.com/wishful-project/wishrem_rem_backend
+git+https://github.com/wishful-project/wishrem_rem_events

@@ -1,0 +1,30 @@
+## UniFlex Agent config file
+
+config:
+  name: "WiFi_Device_Controller"
+  info: 'agent hosts global controller'
+  iface: 'lo'
+  type: 'master'
+##  iface: 'ens33'
+  sub: "tcp://10.5.0.2:8990"
+  pub: "tcp://10.5.0.2:8989"
+
+#broker:
+#  xpub: "tcp://127.0.0.1:8990"
+#  xsub: "tcp://127.0.0.1:8989"
+
+control_applications:
+  myController:
+      file : device_controller.py
+      class_name : DeviceController
+      kwargs : {}
+
+modules:
+  discovery:
+        module : uniflex_app_discovery_pyre
+        class_name : PyreDiscoveryMasterModule
+        kwargs: {"iface":"lo",
+                 "groupName":"uniflex_1234",
+                 "sub":"tcp://127.0.0.1:8990",
+                 "pub":"tcp://127.0.0.1:8989"
+                }
