@@ -34,6 +34,7 @@ Running examples
 2. Node initialization:
 
 	cd init_device_locations/
+
 	python3 init_devices.py
 
 3. Node controller:
@@ -55,6 +56,7 @@ Change IP address of sub and pub to be the IP address of the broker (in yaml fil
 4. REM console:
 
 	cd rem_console/
+
 	python3 REM_console.py
 
 
