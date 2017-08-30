@@ -22,8 +22,7 @@ When installing mysql, select to use as root with password "rem"
 Installation
 ============
 
-        pip3 install -r requirements.txt
-
+	pip3 install -r requirements.txt
 
 Running examples
 ================
@@ -34,29 +33,35 @@ Running examples
 
 2. Node initialization:
 
-        cd init_device_locations/
-        python3 init_devices.py
+	cd init_device_locations/
+	python3 init_devices.py
 
 3. Node controller:
 
-        cd node_controller/
+	cd node_controller/
 
-Change IP address of sub and pub to be the IP address of the broker 
+Change IP address of sub and pub to be the IP address of the broker (in yaml file) 
 
-        sudo uniflex-agent --config ./config_master.yaml
+	sudo uniflex-agent --config ./config_master.yaml
 
 4. RRM controller:
 
-        cd rrm_controller/
+	cd rrm_controller/
 
-Change IP address of sub and pub to be the IP address of the broker 
+Change IP address of sub and pub to be the IP address of the broker (in yaml file)
 
-        sudo uniflex-agent --config ./config_rrm.yaml
+	sudo uniflex-agent --config ./config_rrm.yaml
 
 4. REM console:
 
-        cd rem_console/
-        python3 REM_console.py
+	cd rem_console/
+	python3 REM_console.py
+
+
+Alternative (TWIST testbed) install
+================
+
+Install docker compose (docker_install.sh on Ubuntu 16.04) and run rebuild_docker.sh.
 
 ## Acknowledgement
 The research leading to these results has received funding from the European
