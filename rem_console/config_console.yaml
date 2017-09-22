@@ -1,0 +1,24 @@
+## UniFlex Agent config file
+
+config:
+  name: "REM_Console"
+  info: 'agent hosts global RRM console'
+  iface: 'lo'
+##  type: 'slave'
+##  iface: 'ens33'
+  sub: "tcp://10.5.0.2:8990"
+  pub: "tcp://10.5.0.2:8989"
+
+#broker:
+#  xpub: "tcp://127.0.0.1:8990"
+#  xsub: "tcp://127.0.0.1:8989"
+
+control_applications:
+  myController:
+      file : REM_console.py
+      class_name : REMConsole
+      kwargs : {}
+  discovery:
+      module : uniflex_app_discovery_pyre
+      class_name : PyreDiscoverySlaveModule
+      kwargs: { "iface":"lo", "groupName":"uniflex_1234" }

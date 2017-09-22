@@ -8,7 +8,7 @@ import logging
 import math
 import random as rd
 import numpy as np
-import rem_backend.query_data as qd
+#import rem_backend.query_data as qd
 import json
 
 __author__ = "Daniel Denkovski, Valentin Rakovic"
@@ -46,10 +46,18 @@ class RRMController(modules.ControlApplication):
 		Args:
 			apmac: the MAC address of the access point		
 		'''
-		dev = qd.get_device(apmac)
+		dev = None
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				dev = remControl.blocking(True).get_device(apmac)
+			#else: remControl.start()
+
+		#dev = qd.get_device(apmac)
 		if dev is not None:
-			chan_capab = json.loads(dev['chan_capab'])		
-			ocup_chann = np.array(qd.get_occupied_channels()) # get all ocupied chann
+			chan_capab = json.loads(dev['chan_capab'])
+			ocup_chann = np.array(remControl.blocking(True).get_occupied_channels()) # get all ocupied chann
+			#ocup_chann = np.array(qd.get_occupied_channels()) # get all ocupied chann
 
 			chan_list_str = chan_capab.keys()
 			chan_list = list(map(int, chan_list_str))
@@ -63,11 +71,13 @@ class RRMController(modules.ControlApplication):
 			if (len(free_chann) > 0):
 				dc_val = 100			
 				for chann in np.nditer(free_chann):
-					tmp = qd.get_duty_cycle_heat_map(chann, 1, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
+					tmp = remControl.blocking(True).get_duty_cycle_heat_map(chann, 1, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
+					#tmp = qd.get_duty_cycle_heat_map(chann, 1, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
 					print(tmp)
 					tmp = tmp[0][2]
 					if tmp in [0, 100]:
-						tmp = qd.get_duty_cycle(chann, 1) # get the duty cycle for given chann
+						tmp = remControl.blocking(True).get_duty_cycle(chann, 1) # get the duty cycle for chann
+						#tmp = qd.get_duty_cycle(chann, 1) # get the duty cycle for given chann
 						#print(tmp)
 						if tmp[0] is None:
 							tmp = 100
@@ -87,7 +97,8 @@ class RRMController(modules.ControlApplication):
 			else:
 				# allocate the AP to the channel with least APs. If all the same allocate to lowest channel index
 
-				chan_info = np.asarray(qd.get_occupied_channels_count())
+				chan_info = np.asarray(remControl.blocking(True).get_occupied_channels_count())
+				#chan_info = np.asarray(qd.get_occupied_channels_count())
 				chan_info_new = chan_info[np.in1d(chan_info[:,1], all_chan)]
 				tup = min(chan_info_new, key=lambda t: t[0])
 				candidate_chann = tup[1]
@@ -114,7 +125,7 @@ class RRMController(modules.ControlApplication):
 	
 			self.log.info("Configuration: ap_mac = {}, ssid = {}, channel = {}, power = {}, hw_mode = {}, ht_capab = {}".format(apmac, ssid, candidate_chann, power, hwmod, htcap))
 			rrmconfigure_event = RRMReconfigureAP(apmac, ssid, power, int(candidate_chann), hwmod, htcap)
-			self.send_event(rrmconfigure_event)	
+			self.send_event(rrmconfigure_event)
 
 	@modules.on_start()
 	def my_start_function(self):
@@ -164,11 +175,27 @@ class RRMController(modules.ControlApplication):
 		Reconfigures APs if degraded using the self.reconfigure_ap function.
 		'''
 		self.log.info("Periodic RRM Evaluation")
-		timeMinutes = self.timeInterval/60
-		results = qd.get_ap_statistics(timeMinutes)
-		self.log.info("AP statistics: \n{} ".format(results))
-		degraded_aps = qd.get_ap_degraded_retries(timeMinutes, self.retries_threshold)
-		self.log.info("Degraded APs: \n{} ".format(degraded_aps))
-		for ap in degraded_aps:
-			self.reconfigure_ap(ap[0])
+
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				timeMinutes = self.timeInterval/60
+				results = remControl.blocking(True).get_ap_statistics(timeMinutes)
+				#results = qd.get_ap_statistics(timeMinutes)
+				self.log.info("AP statistics: \n{} ".format(results))
+				degraded_aps = remControl.blocking(True).get_ap_degraded_retries(timeMinutes, self.retries_threshold)
+				#degraded_aps = qd.get_ap_degraded_retries(timeMinutes, self.retries_threshold)
+				self.log.info("Degraded APs: \n{} ".format(degraded_aps))
+				for ap in degraded_aps:
+					self.reconfigure_ap(ap[0])
+
 		self.timer.start(self.timeInterval)
+
+	def get_rem_controller(self):
+		remControl = None
+		node = self.get_node(0)
+		for app in node.get_control_applications():
+			if app.name == "REMController":
+				remControl = app
+				break
+		return remControl

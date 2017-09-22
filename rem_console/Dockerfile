@@ -26,7 +26,4 @@ RUN pip3 install git+https://github.com/uniflex/uniflex@master
 
 RUN pip3 install git+https://github.com/wishful-project/wishrem_rem_backend@master
 
-RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-RUN chmod +x wait-for-it.sh
-
-CMD ["python3","REM_console.py"]
+CMD ["uniflex-agent", "--config", "/app/config_console.yaml"]

@@ -16,8 +16,6 @@ RUN apt-get install -y wget
 
 RUN apt-get install -y git
 
-ENV LANG C.UTF-8
-
 WORKDIR /app
 
 COPY . /app/
@@ -32,4 +30,7 @@ RUN pip3 install git+https://github.com/wishful-project/wishrem_rem_backend@mast
 
 RUN pip3 install git+https://github.com/wishful-project/wishrem_rem_events@master
 
-CMD ["uniflex-agent", "--config", "/app/config_master.yaml"]
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
+
+CMD ["uniflex-agent", "--config", "/app/config_rem.yaml"]

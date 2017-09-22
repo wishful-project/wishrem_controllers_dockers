@@ -11,6 +11,7 @@ services:
     networks:
       wishrem:
         ipv4_address: 10.5.0.5
+    privileged: true
 
   controller_init:
     container_name: wishrem_init
@@ -23,46 +24,63 @@ services:
     networks:
       wishrem:
         ipv4_address: 10.5.0.6
+    privileged: true
 
   controller_rem:
-    container_name: wishrem_rem
-    build: ./rem_console
+    container_name: wishrem_rem_controller
+    build: ./rem_controller
     environment:
      - MYSQL_ENV=database
     depends_on:
      - "database"
-    stdin_open: true
-    tty: true
     command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "/bin/bash", "-c", "tail -f /dev/null"]
     networks:
       wishrem:
         ipv4_address: 10.5.0.7
+    privileged: true
+
+  console_rem:
+    container_name: wishrem_rem_console
+    build: ./rem_console
+    environment:
+     - MYSQL_ENV=database
+    depends_on:
+     - "controller_rem"
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash", "-c", "tail -f /dev/null"]
+    networks:
+      wishrem:
+        ipv4_address: 10.5.0.8
+    privileged: true
 
   controller_nodes:
-    container_name: wishrem_nodes
+    container_name: wishrem_nodes_controller
     build: ./node_controller
     environment:
      - MYSQL_ENV=database
     depends_on:
-     - "database"
+     - "controller_rem"
     stdin_open: true
     tty: true
-    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "/bin/bash", "-c", "tail -f /dev/null"]
+    command: ["/bin/bash", "-c", "tail -f /dev/null"]
     networks:
       wishrem:
         ipv4_address: 10.5.0.3
+    privileged: true
 
   controller_rrm:
-    container_name: wishrem_rrm
+    container_name: wishrem_rrm_controller
     build: ./rrm_controller
     environment:
      - MYSQL_ENV=database
     depends_on:
-     - "database"
-    command: ["./wait-for-it.sh", "-t", "0", "database:3306", "--", "uniflex-agent", "--config", "/app/config_rrm.yaml"]
+     - "controller_rem"
+    command: ["uniflex-agent", "--config", "/app/config_rrm.yaml"]
     networks:
       wishrem:
         ipv4_address: 10.5.0.4
+    privileged: true
 
   broker:
     container_name: wishrem_broker
@@ -77,6 +95,7 @@ services:
     networks:
       wishrem:
         ipv4_address: 10.5.0.2
+    privileged: true
 
 networks:
   wishrem:

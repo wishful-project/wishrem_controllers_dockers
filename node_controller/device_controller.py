@@ -11,8 +11,8 @@ from rem_events.rrm_events import *
 import threading
 import _thread
 from random import randint
-import rem_backend.insert_query as insert_query
-import json
+#import rem_backend.insert_query as insert_query
+#import json
 
 __author__ = "Daniel Denkovski"
 __copyright__ = "Copyright (c) 2017, Faculty of Electrical Engineering and Information Technologies, UKIM, Skopje, Macedonia"
@@ -34,6 +34,15 @@ class DeviceController(modules.ControlApplication):
 		self.mynodes = {}
 		self.myrrm_uuid = None
 		self.running = False
+
+	def get_rem_controller(self):
+		remControl = None
+		node = self.get_node(0)
+		for app in node.get_control_applications():
+			if app.name == "REMController":
+				remControl = app
+				break
+		return remControl
 
 	def main_menu(self):
 		'''
@@ -158,7 +167,13 @@ class DeviceController(modules.ControlApplication):
 		mythread = threading.Thread(target=self.main_menu)
 		#mythread.daemon = True
 		mythread.start()
-		insert_query.device_init()
+
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).device_init()
+			#else: remControl.start()
+		#insert_query.device_init()
 
 	@modules.on_exit()
 	def my_stop_function(self):
@@ -204,8 +219,15 @@ class DeviceController(modules.ControlApplication):
 		Handles data regarding the sensed RSSI from a WiFi device, on a given channel and stores it in the REM database  
 		'''
 		receiver = event.node
-		data = (event.ta, event.ra, event.rssi, datetime.now(), 'data', 1, event.chnel, 0)
-		insert_query.insert_rssi_measurement(data)
+
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).insert_rssi_measurement(event.ta, event.ra, event.rssi, event.chnel)
+			#else: remControl.start()
+
+		#data = (event.ta, event.ra, event.rssi, datetime.now(), 'data', 1, event.chnel, 0)
+		#insert_query.insert_rssi_measurement(data)
 		#self.log.info("RSSI: uuid: {}, RA: {}, TA: {}, value: {}, channel: {}".format(receiver.uuid, event.ra, event.ta, event.rssi, event.chnel))
 
 	@modules.on_event(WiFiDutyCycleSampleEvent)
@@ -214,8 +236,15 @@ class DeviceController(modules.ControlApplication):
 		Handles data regarding the sensed duty cycle from a WiFi device on a given channel and stores it in the REM database  
 		'''
 		receiver = event.node
-		dc_data = (event.ra, event.dc*100, datetime.now(), event.chnel)
-		insert_query.insert_duty_cycle(dc_data)
+
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).insert_duty_cycle(event.ra, event.dc, event.chnel)
+			#else: remControl.start()
+
+		#dc_data = (event.ra, event.dc*100, datetime.now(), event.chnel)
+		#insert_query.insert_duty_cycle(dc_data)
 		#self.log.info("Duty cycle: uuid: {}, RA: {}, value: {}, channel: {}".format(receiver.uuid, event.ra, event.dc, event.chnel))
 
 	@modules.on_event(WiFiCapabilities)
@@ -231,9 +260,16 @@ class DeviceController(modules.ControlApplication):
 		self.mynodes[receiver.uuid]['status'] = 'idle'
 		self.mynodes[receiver.uuid]['details'] = ""
 		self.mynodes[receiver.uuid]['config'] = {}
-		capab_str = json.dumps(event.capabilities)
-		device_data = (event.macaddr, receiver.uuid, capab_str)
-		insert_query.insert_device_capabilities(device_data)
+
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).insert_duty_cycle(event.macaddr, receiver.uuid, event.capabilities)
+			#else: remControl.start()
+
+		#capab_str = json.dumps(event.capabilities)
+		#device_data = (event.macaddr, receiver.uuid, capab_str)
+		#insert_query.insert_device_capabilities(device_data)
 		self.setup_wifi_monitor(event.macaddr)
 
 	def setup_wifi_ap(self, macaddr, ssid, power, channel, hw_mode, ht_capab):
@@ -316,8 +352,14 @@ class DeviceController(modules.ControlApplication):
 		tx_act = event.tx_activity #in percents
 		rx_act = event.rx_activity #in percents
 
-		link_data = (txmac, rxmac, rssi, tx_ret*100, tx_fai*100, tx_rate/1000000, rx_rate/1000000, tx_thr/1000000, rx_thr/1000000, tx_act*100, rx_act*100, datetime.now())
-		insert_query.insert_link_statistics(link_data)
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).insert_link_statistics(txmac, rxmac, rssi, tx_ret, tx_fai, tx_rate, rx_rate, tx_thr, rx_thr, tx_act, rx_act)
+			#else: remControl.start()
+
+		#link_data = (txmac, rxmac, rssi, tx_ret*100, tx_fai*100, tx_rate/1000000, rx_rate/1000000, tx_thr/1000000, rx_thr/1000000, tx_act*100, rx_act*100, datetime.now())
+		#insert_query.insert_link_statistics(link_data)
 
 		#self.log.info("%s->%s link statistics:\n\tRSSI: %.0fdBm \n\ttx packet retries: %.2f%% \n\ttx packet fails: %.2f%% \n\ttx bitrate: %.2fMbps \n\trx bitrate: %.2fMbps \n\tachieved tx throughput: %.2fMbps \n\tachieved rx throughput: %.2fMbps \n\ttx activity: %.2f%% \n\trx activity: %.2f%%" % (txmac, rxmac, rssi, tx_ret*100, tx_fai*100, tx_rate/1000000, rx_rate/1000000, tx_thr/1000000, rx_thr/1000000, tx_act*100, rx_act*100))
 
@@ -337,8 +379,14 @@ class DeviceController(modules.ControlApplication):
 		tot_tx_act = event.total_tx_activity #in percents
 		tot_rx_act = event.total_rx_activity #in percents
 
-		ap_data = (apmac, tot_ret*100, tot_fai*100, tot_tx_thr/1000000, tot_rx_thr/1000000, tot_tx_act*100, tot_rx_act*100, datetime.now())
-		insert_query.insert_ap_statistics(ap_data)
+		remControl = self.get_rem_controller()
+		if remControl is not None:
+			if remControl.is_running():
+				remControl.blocking(True).insert_link_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act)
+			#else: remControl.start()
+
+		#ap_data = (apmac, tot_ret*100, tot_fai*100, tot_tx_thr/1000000, tot_rx_thr/1000000, tot_tx_act*100, tot_rx_act*100, datetime.now())
+		#insert_query.insert_ap_statistics(ap_data)
 
 		if receiver.uuid in self.mynodes:
 			self.mynodes[receiver.uuid]['details'] = "connected to {} stations: {}".format(len(stations), stations)
@@ -357,8 +405,14 @@ class DeviceController(modules.ControlApplication):
 			self.mynodes[receiver.uuid]['status'] = 'monitor'
 			self.mynodes[receiver.uuid]['details'] = ""
 			self.mynodes[receiver.uuid]['config'] = {}
-			device_data = (event.macaddr, 1, None, None, None, None, None, None)
-			insert_query.update_device_status(device_data)
+
+			remControl = self.get_rem_controller()
+			if remControl is not None:
+				if remControl.is_running():
+					remControl.blocking(True).update_device_status(event.macaddr, 1)
+
+			#device_data = (event.macaddr, 1, None, None, None, None, None, None)
+			#insert_query.update_device_status(device_data)
 		
 	@modules.on_event(WiFiConfigureStationRsp)
 	def serve_configure_station_rsp_event(self, event):
@@ -373,8 +427,14 @@ class DeviceController(modules.ControlApplication):
 			self.mynodes[receiver.uuid]['status'] = 'station'
 			self.mynodes[receiver.uuid]['details'] = "connected to BSSID: {}".format(apmac)
 			self.mynodes[receiver.uuid]['config'] = staconf
-			device_data = (event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
-			insert_query.update_device_status(device_data)
+
+			remControl = self.get_rem_controller()
+			if remControl is not None:
+				if remControl.is_running():
+					remControl.blocking(True).update_device_status(event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
+
+			#device_data = (event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
+			#insert_query.update_device_status(device_data)
 			
 	@modules.on_event(WiFiConfigureAPRsp)
 	def serve_apconnection_rsp_event(self, event):
@@ -387,7 +447,7 @@ class DeviceController(modules.ControlApplication):
 		if receiver.uuid in self.mynodes:
 			self.mynodes[receiver.uuid]['status'] = 'AP'
 			self.mynodes[receiver.uuid]['config'] = apconf
-			device_data = (event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'], None, None)
+
 			if 'stations' in self.mynodes[receiver.uuid]:
 				stations = self.mynodes[receiver.uuid]['stations']
 				for staind in range(0, len(stations)):
@@ -399,7 +459,13 @@ class DeviceController(modules.ControlApplication):
 						apmac = self.mynodes[receiver.uuid]['MAC']
 						self.setup_wifi_station(stamac, ssid, apmac, power, channel)
 
-			insert_query.update_device_status(device_data)
+			remControl = self.get_rem_controller()
+			if remControl is not None:
+				if remControl.is_running():
+					remControl.blocking(True).update_device_status(event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'])
+
+			#device_data = (event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'], None, None)
+			#insert_query.update_device_status(device_data)
 
 	@modules.on_event(RRMRegister)
 	def serve_rrm_register_event(self, event):
