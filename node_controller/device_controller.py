@@ -254,23 +254,24 @@ class DeviceController(modules.ControlApplication):
 		'''
 		receiver = event.node
 		#self.log.info("WiFiCapabilities: uuid: {}, MAC: {}, capabilities: {}".format(receiver.uuid, event.macaddr, event.capabilities))
-		self.mynodes[receiver.uuid] = {}
-		self.mynodes[receiver.uuid]['MAC'] = event.macaddr
-		self.mynodes[receiver.uuid]['capabilities'] = event.capabilities
-		self.mynodes[receiver.uuid]['status'] = 'idle'
-		self.mynodes[receiver.uuid]['details'] = ""
-		self.mynodes[receiver.uuid]['config'] = {}
+		if event.macaddr is not None and event.capabilities is not None:
+			self.mynodes[receiver.uuid] = {}
+			self.mynodes[receiver.uuid]['MAC'] = event.macaddr
+			self.mynodes[receiver.uuid]['capabilities'] = event.capabilities
+			self.mynodes[receiver.uuid]['status'] = 'idle'
+			self.mynodes[receiver.uuid]['details'] = ""
+			self.mynodes[receiver.uuid]['config'] = {}
 
-		remControl = self.get_rem_controller()
-		if remControl is not None:
-			if remControl.is_running() and event.macaddr is not None and event.capabilities is not None:
-				remControl.blocking(False).insert_device_capabilities(event.macaddr, receiver.uuid, event.capabilities)
-			#else: remControl.start()
+			remControl = self.get_rem_controller()
+			if remControl is not None:
+				if remControl.is_running():
+					remControl.blocking(False).insert_device_capabilities(event.macaddr, receiver.uuid, event.capabilities)
+				#else: remControl.start()
 
-		#capab_str = json.dumps(event.capabilities)
-		#device_data = (event.macaddr, receiver.uuid, capab_str)
-		#insert_query.insert_device_capabilities(device_data)
-		self.setup_wifi_monitor(event.macaddr)
+			#capab_str = json.dumps(event.capabilities)
+			#device_data = (event.macaddr, receiver.uuid, capab_str)
+			#insert_query.insert_device_capabilities(device_data)
+			self.setup_wifi_monitor(event.macaddr)
 
 	def setup_wifi_ap(self, macaddr, ssid, power, channel, hw_mode, ht_capab):
 		'''
