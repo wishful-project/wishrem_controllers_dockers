@@ -486,7 +486,7 @@ class REMController(modules.ControlApplication):
 	@modules.on_event(REMGetDeviceInformationEvent)
 	def serve_get_device_event(self, event):
 		macaddress = event.macaddress
-		result = get_device(macaddress)
+		result = self.get_device(macaddress)
 		if result is not None:
 			rsp_event = REMRspDeviceInformationEvent(macaddress, result)
 			self.send_event(rsp_event)
@@ -494,7 +494,7 @@ class REMController(modules.ControlApplication):
 	@modules.on_event(REMGetPathlossModel)
 	def serve_get_pathloss_model_event(self, event):
 		channel = event.channel
-		result = get_pathloss(channel)
+		result = self.get_pathloss(channel)
 		if result is not None:
 			rsp_event = REMRspPathlossModel(channel, result)
 			self.send_event(rsp_event)
@@ -504,7 +504,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		floor = event.floor
 		timespan = event.timespan
-		result = get_tx_locations(channel, floor, timespan)
+		result = self.get_tx_locations(channel, floor, timespan)
 		if result is not None:
 			rsp_event = REMRspTransmittersLocations(channel, floor, result)
 			self.send_event(rsp_event)
@@ -514,7 +514,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		threshold = event.threshold
 		timespan = event.timespan
-		result = get_channel_status(channel, threshold, timespan)
+		result = self.get_channel_status(channel, threshold, timespan)
 		if result is not None:
 			rsp_event = REMRspChannelStatus(channel, result)
 			self.send_event(rsp_event)
@@ -528,7 +528,7 @@ class REMController(modules.ControlApplication):
 		uly = event.uly
 		drx = event.drx
 		dry = event.dry
-		result = get_channel_status_by_area(channel, threshold, timespan, ulx, uly, drx, dry)
+		result = self.get_channel_status_by_area(channel, threshold, timespan, ulx, uly, drx, dry)
 		if result is not None:
 			rsp_event = REMRspChannelStatusByArea(channel, ulx, uly, drx, dry, result)
 			self.send_event(rsp_event)
@@ -539,7 +539,7 @@ class REMController(modules.ControlApplication):
 		threshold = event.threshold
 		timespan = event.timespan
 		rx_addr = event.rx_addr
-		result = get_channel_status_by_device(channel, rx_add, threshold, timespan)
+		result = self.get_channel_status_by_device(channel, rx_add, threshold, timespan)
 		if result is not None:
 			rsp_event = REMRspChannelStatusByDevice(channel, rx_add, result)
 			self.send_event(rsp_event)
@@ -549,7 +549,7 @@ class REMController(modules.ControlApplication):
 		rx_addr = event.rx_addr
 		threshold = event.threshold
 		timespan = event.timespan
-		result = get_channel_status_all_by_device(rx_add, threshold, timespan)
+		result = self.get_channel_status_all_by_device(rx_add, threshold, timespan)
 		if result is not None:
 			rsp_event = REMRspAllChannelsStatusByDevice(rx_add, result)
 			self.send_event(rsp_event)
@@ -558,7 +558,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_channel_status_all_event(self, event):
 		threshold = event.threshold
 		timespan = event.timespan
-		result = get_channel_status_all(threshold, timespan)
+		result = self.get_channel_status_all(threshold, timespan)
 		if result is not None:
 			rsp_event = REMRspAllChannelsStatus(result)
 			self.send_event(rsp_event)
@@ -567,7 +567,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_duty_cycle_event(self, event):
 		channel = event.channel
 		timespan = event.timespan
-		result = get_duty_cycle(channel, timespan)
+		result = self.get_duty_cycle(channel, timespan)
 		if result is not None:
 			rsp_event = REMRspDutyCycle(channel, result)
 			self.send_event(rsp_event)
@@ -580,7 +580,7 @@ class REMController(modules.ControlApplication):
 		uly = event.uly
 		drx = event.drx
 		dry = event.dry
-		result = get_duty_cycle_by_area(channel, timespan, ulx, uly, drx, dry)
+		result = self.get_duty_cycle_by_area(channel, timespan, ulx, uly, drx, dry)
 		if result is not None:
 			rsp_event = REMRspDutyCycleByArea(channel, ulx, uly, drx, dry, result)
 			self.send_event(rsp_event)
@@ -590,7 +590,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		rx_add = event.rx_add
 		timespan = event.timespan
-		result = get_duty_cycle_by_device(channel, rx_add, timespan)
+		result = self.get_duty_cycle_by_device(channel, rx_add, timespan)
 		if result is not None:
 			rsp_event = REMRspDutyCycleByDevice(channel, rx_add, result)
 			self.send_event(rsp_event)
@@ -599,7 +599,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_duty_cycle_all_channels_by_device_event(self, event):
 		timespan = event.timespan
 		rx_add = event.rx_add
-		result = get_duty_cycle_all_channels_by_device(rx_add, timespan)
+		result = self.get_duty_cycle_all_channels_by_device(rx_add, timespan)
 		if result is not None:
 			rsp_event = REMRspDutyCycleAllChannelsByDevice(rx_add, result)
 			self.send_event(rsp_event)
@@ -607,7 +607,7 @@ class REMController(modules.ControlApplication):
 	@modules.on_event(REMGetDutyCycleAllChannels)
 	def serve_get_duty_cycle_all_channels_event(self, event):
 		timespan = event.timespan
-		result = get_duty_cycle_all_channels(timespan)
+		result = self.get_duty_cycle_all_channels(timespan)
 		if result is not None:
 			rsp_event = REMRspDutyCycleAllChannels(result)
 			self.send_event(rsp_event)
@@ -622,7 +622,7 @@ class REMController(modules.ControlApplication):
 		dry = event.dry
 		nx = event.nx
 		ny = event.ny
-		result = get_duty_cycle_heat_map(channel, timespan, nx, ny, ulx, uly, drx, dry)
+		result = self.get_duty_cycle_heat_map(channel, timespan, nx, ny, ulx, uly, drx, dry)
 		if result is not None:
 			rsp_event = REMRspDutyCycleHeatMap(channel, result)
 			self.send_event(rsp_event)
@@ -638,35 +638,35 @@ class REMController(modules.ControlApplication):
 		nx = event.nx
 		ny = event.ny
 		nz = event.nz
-		result = estimate_tx_location(addr, timespan, ulx, uly, drx, dry, nx, ny, nz)
+		result = self.estimate_tx_location(addr, timespan, ulx, uly, drx, dry, nx, ny, nz)
 		if result is not None:
 			rsp_event = REMRspEstimatedTXLocation(addr, result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetOccupiedChannels)
 	def serve_get_occupied_channels_event(self, event):
-		result = get_occupied_channels()
+		result = self.get_occupied_channels()
 		if result is not None:
 			rsp_event = REMRspOccupiedChannels(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetOccupiedChannelsCount)
 	def serve_get_occupied_channels_count_event(self, event):
-		result = get_occupied_channels_count()
+		result = self.get_occupied_channels_count()
 		if result is not None:
 			rsp_event = REMRspOccupiedChannelsCount(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetAllAPStatistics)
 	def serve_get_ap_statistics_event(self, event):
-		result = get_ap_statistics(event.timespan)
+		result = self.get_ap_statistics(event.timespan)
 		if result is not None:
 			rsp_event = REMRspAllAPStatistics(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetDegradedAPsBasedOnRetries)
 	def serve_get_ap_degraded_retries_event(self, event):
-		result = get_ap_degraded_retries(event.timestamp, event.retries_threshold)
+		result = self.get_ap_degraded_retries(event.timestamp, event.retries_threshold)
 		if result is not None:
 			rsp_event = REMRspDegradedAPs(results)
 			self.send_event(rsp_event)
@@ -675,7 +675,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_all_active_devices_on_channel_event(self, event):
 		channel = event.channel
 		timespan = event.timespan
-		result = get_all_active_devices_on_channel(channel, timespan)
+		result = self.get_all_active_devices_on_channel(channel, timespan)
 		if result is not None:
 			rsp_event = REMRspAllActiveDevicesOnChannel(channel, result)
 			self.send_event(rsp_event)
@@ -684,7 +684,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_all_active_devices_on_channel_event(self, event):
 		channel = event.channel
 		timespan = event.timespan
-		result = get_chann_model(timespan, channel)
+		result = self.get_chann_model(timespan, channel)
 		if result is not None:
 			rsp_event = REMRspPathlossModel(channel, result)
 			self.send_event(rsp_event)
