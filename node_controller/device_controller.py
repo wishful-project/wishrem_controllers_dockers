@@ -168,11 +168,6 @@ class DeviceController(modules.ControlApplication):
 		#mythread.daemon = True
 		mythread.start()
 
-		remControl = self.get_rem_controller()
-		if remControl is not None:
-			if remControl.is_running():
-				remControl.blocking(True).device_init()
-			#else: remControl.start()
 		#insert_query.device_init()
 
 	@modules.on_exit()
@@ -191,6 +186,11 @@ class DeviceController(modules.ControlApplication):
 		node = event.node
 		#self.log.info("Added new node: {}, Local: {}".format(node.uuid, node.local))
 		self._add_node(node)
+
+		for app in node.get_control_applications():
+			if app.name == "REMController":
+				app.blocking(False).device_init()
+
 		try:
 			getcap_event = WiFiGetCapabilities(node.uuid)				
 			self.send_event(getcap_event)
@@ -223,7 +223,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(True).insert_rssi_measurement(event.ta, event.ra, event.rssi, event.chnel)
+				remControl.blocking(False).insert_rssi_measurement(event.ta, event.ra, event.rssi, event.chnel)
 			#else: remControl.start()
 
 		#data = (event.ta, event.ra, event.rssi, datetime.now(), 'data', 1, event.chnel, 0)
@@ -240,7 +240,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(True).insert_duty_cycle(event.ra, event.dc, event.chnel)
+				remControl.blocking(False).insert_duty_cycle(event.ra, event.dc, event.chnel)
 			#else: remControl.start()
 
 		#dc_data = (event.ra, event.dc*100, datetime.now(), event.chnel)
@@ -263,8 +263,8 @@ class DeviceController(modules.ControlApplication):
 
 		remControl = self.get_rem_controller()
 		if remControl is not None:
-			if remControl.is_running():
-				remControl.blocking(True).insert_device_capabilities(event.macaddr, receiver.uuid, event.capabilities)
+			if remControl.is_running() and event.macaddr is not None and event.capabilities is not None:
+				remControl.blocking(False).insert_device_capabilities(event.macaddr, receiver.uuid, event.capabilities)
 			#else: remControl.start()
 
 		#capab_str = json.dumps(event.capabilities)
@@ -355,7 +355,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(True).insert_link_statistics(txmac, rxmac, rssi, tx_ret, tx_fai, tx_rate, rx_rate, tx_thr, rx_thr, tx_act, rx_act)
+				remControl.blocking(False).insert_link_statistics(txmac, rxmac, rssi, tx_ret, tx_fai, tx_rate, rx_rate, tx_thr, rx_thr, tx_act, rx_act)
 			#else: remControl.start()
 
 		#link_data = (txmac, rxmac, rssi, tx_ret*100, tx_fai*100, tx_rate/1000000, rx_rate/1000000, tx_thr/1000000, rx_thr/1000000, tx_act*100, rx_act*100, datetime.now())
@@ -382,7 +382,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(True).insert_link_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act)
+				remControl.blocking(False).insert_link_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act)
 			#else: remControl.start()
 
 		#ap_data = (apmac, tot_ret*100, tot_fai*100, tot_tx_thr/1000000, tot_rx_thr/1000000, tot_tx_act*100, tot_rx_act*100, datetime.now())
@@ -409,7 +409,7 @@ class DeviceController(modules.ControlApplication):
 			remControl = self.get_rem_controller()
 			if remControl is not None:
 				if remControl.is_running():
-					remControl.blocking(True).update_device_status(event.macaddr, 1)
+					remControl.blocking(False).update_device_status(event.macaddr, 1)
 
 			#device_data = (event.macaddr, 1, None, None, None, None, None, None)
 			#insert_query.update_device_status(device_data)
@@ -431,7 +431,7 @@ class DeviceController(modules.ControlApplication):
 			remControl = self.get_rem_controller()
 			if remControl is not None:
 				if remControl.is_running():
-					remControl.blocking(True).update_device_status(event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
+					remControl.blocking(False).update_device_status(event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
 
 			#device_data = (event.macaddr, 3, None, staconf['power'], staconf['ssid'], staconf['channel'], None, apmac)
 			#insert_query.update_device_status(device_data)
@@ -462,7 +462,7 @@ class DeviceController(modules.ControlApplication):
 			remControl = self.get_rem_controller()
 			if remControl is not None:
 				if remControl.is_running():
-					remControl.blocking(True).update_device_status(event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'])
+					remControl.blocking(False).update_device_status(event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'])
 
 			#device_data = (event.macaddr, 2, apconf['hw_mode'], apconf['power'], apconf['ssid'], apconf['channel'], None, None)
 			#insert_query.update_device_status(device_data)

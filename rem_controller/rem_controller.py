@@ -1,4 +1,5 @@
 from uniflex.core import modules
+from uniflex.core import events
 from rem_events.rem_events import *
 from datetime import date, datetime, timedelta
 import time
@@ -371,7 +372,7 @@ class REMController(modules.ControlApplication):
 			uuid: the uuid of the node
 			capab: dictionary with capabilities
 		'''
-		capab_str = json.dumps(event.capabilities)
+		capab_str = json.dumps(capab)
 		device_data = (macaddr, uuid, capab_str)
 		insert_data.insert_device_capabilities(device_data)
 
