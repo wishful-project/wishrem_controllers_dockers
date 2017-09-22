@@ -199,3 +199,23 @@ class RRMController(modules.ControlApplication):
 					remControl = app
 					break
 		return remControl
+
+	@modules.on_event(events.NewNodeEvent)
+	def add_node(self, event):
+		'''
+		Adds a REMController node in the active node list  
+		'''
+		node = event.node
+		for app in node.get_control_applications():
+			if app.name == "REMController":
+				self._add_node(node)
+
+	@modules.on_event(events.NodeExitEvent)
+	@modules.on_event(events.NodeLostEvent)
+	def remove_node(self, event):
+		'''
+		Removes a REMController from the active node list, when it stops operating  
+		'''
+		node = event.node
+		reason = event.reason
+		if node in self.get_nodes(): self._remove_node(node)
