@@ -48,11 +48,11 @@ class REMConsole(modules.ControlApplication):
 
 	def get_rem_controller(self):
 		remControl = None
-		node = self.get_node(0)
-		for app in node.get_control_applications():
-			if app.name == "REMController":
-				remControl = app
-				break
+		for node in self.get_nodes():
+			for app in node.get_control_applications():
+				if app.name == "REMController":
+					remControl = app
+					break
 		return remControl
 
 	def main_menu(self):

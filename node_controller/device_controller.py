@@ -37,11 +37,11 @@ class DeviceController(modules.ControlApplication):
 
 	def get_rem_controller(self):
 		remControl = None
-		node = self.get_node(0)
-		for app in node.get_control_applications():
-			if app.name == "REMController":
-				remControl = app
-				break
+		for node in self.get_nodes():
+			for app in node.get_control_applications():
+				if app.name == "REMController":
+					remControl = app
+					break
 		return remControl
 
 	def main_menu(self):
@@ -264,7 +264,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(True).insert_duty_cycle(event.macaddr, receiver.uuid, event.capabilities)
+				remControl.blocking(True).insert_device_capabilities(event.macaddr, receiver.uuid, event.capabilities)
 			#else: remControl.start()
 
 		#capab_str = json.dumps(event.capabilities)

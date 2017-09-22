@@ -43,7 +43,7 @@ class REMController(modules.ControlApplication):
 		self.log.info("stop REM control app")
 		self.running = False
 
-	def get_device(mac_add):
+	def get_device(self, mac_add):
 		'''
 		Returs information for a specific device 
 		Args:
@@ -57,7 +57,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 
-	def get_pathloss_model(channel):
+	def get_pathloss_model(self, channel):
 		'''
 		Returs the path loss model for a specific channel 
 		Args:
@@ -72,7 +72,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None 
 
-	def get_tx_locations(channel, floor, timespan):
+	def get_tx_locations(self, channel, floor, timespan):
 		'''
 		Returs the tx locations for a specific channel floor and timespan
 		Args:
@@ -90,7 +90,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result 
 
-	def get_channel_status(channel, threshold, timespan):
+	def get_channel_status(self, channel, threshold, timespan):
 		'''
 		Returs the channel status for a specific channel and timespan. Efectively cooperative spectrum sensing based on hard decision combining
 		Args:
@@ -106,7 +106,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None 
 
-	def get_channel_status_by_area(channel, threshold, timespan, ulx=0, uly=1000, drx=1000, dry=0):
+	def get_channel_status_by_area(self, channel, threshold, timespan, ulx=0, uly=1000, drx=1000, dry=0):
 		'''
 		Returs the channel status for a specific channel, area and timespan. Efectively cooperative spectrum sensing based on hard decision combining
 		Args:
@@ -123,7 +123,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 		
-	def get_channel_status_by_device(channel, rx_add, threshold, timespan):
+	def get_channel_status_by_device(self, channel, rx_add, threshold, timespan):
 		'''
 		Returs the channel status for a specific channel, device and timespan. 
 		Args:
@@ -140,7 +140,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 
-	def get_channel_status_all_by_device(rx_add, threshold, timespan):
+	def get_channel_status_all_by_device(self, rx_add, threshold, timespan):
 		'''
 		Returs the list of channel status for all channels, specific device and timespan.
 		Args:
@@ -156,7 +156,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_channel_status_all(threshold, timespan):
+	def get_channel_status_all(self, threshold, timespan):
 		'''
 		Returs the list of channel status for all channels, and timespan. Efectively cooperative spectrum sensing based on hard decision combining 
 		Args:
@@ -171,7 +171,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_duty_cycle(channel, timespan):
+	def get_duty_cycle(self, channel, timespan):
 		'''
 		Returs the duty cycle for a channel and timespan of interest
 		Args:
@@ -186,7 +186,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 
-	def get_duty_cycle_by_area(channel, timespan, ulx=0, uly=1000, drx=1000, dry=0):
+	def get_duty_cycle_by_area(self, channel, timespan, ulx=0, uly=1000, drx=1000, dry=0):
 		'''
 		Returs the duty cycle for a channel, area and timespan of interest
 		Args:
@@ -202,7 +202,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_duty_cycle_by_device(channel, rx_add, timespan):
+	def get_duty_cycle_by_device(self, channel, rx_add, timespan):
 		'''
 		Returs the duty cycle for a channel, device and timespan of interest
 		Args:
@@ -218,7 +218,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_duty_cycle_all_channels_by_device(rx_add, timespan):
+	def get_duty_cycle_all_channels_by_device(self, rx_add, timespan):
 		'''
 		Returs the duty cycle for all channels, for a given device and timespan of interest
 		Args:
@@ -233,7 +233,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_duty_cycle_all_channels(timespan):
+	def get_duty_cycle_all_channels(self, timespan):
 		'''
 		Returs the duty cycle for all channels, and timespan of interest
 		Args:
@@ -247,7 +247,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return result
 
-	def get_duty_cycle_heat_map(channel, timespan, nx=50, ny=50, ulx=0, uly=1000, drx=1000, dry=0, intp=1):
+	def get_duty_cycle_heat_map(self, channel, timespan, nx=50, ny=50, ulx=0, uly=1000, drx=1000, dry=0, intp=1):
 		'''
 		Returs the duty cycle heatmap for a specific channel, area and timespan of interest
 		Args:
@@ -265,7 +265,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 
-	def estimate_tx_location(addr, timespan=60, ulx=0, uly=15, drx=32, dry=0, nx=50, ny=50, nz=50):
+	def estimate_tx_location(self, addr, timespan=60, ulx=0, uly=15, drx=32, dry=0, nx=50, ny=50, nz=50):
 		'''
 		Returs the estimated location of a tx of interest
 		Args:
@@ -282,7 +282,7 @@ class REMController(modules.ControlApplication):
 		else:
 			return None
 
-	def estimate_tx_range(addr, timespan=60):
+	def estimate_tx_range(self, addr, timespan=60):
 		'''
 		Returs the estimated tx range of a tx of interest
 		Args:
@@ -297,42 +297,42 @@ class REMController(modules.ControlApplication):
 		else:
 			return None		
 
-	def get_occupied_channels():
+	def get_occupied_channels(self):
 		result =  query_data.get_occupied_channels()
 		if not result:
 			return None
 		else:
 			return result
 
-	def get_occupied_channels_count():	
+	def get_occupied_channels_count(self):	
 		result =  query_data.get_occupied_channels_count()
 		if not result:
 			return None
 		else:
 			return result	
 
-	def get_ap_statistics(timespan=1):
+	def get_ap_statistics(self, timespan=1):
 		result =  query_data.get_ap_statistics(timespan)
 		if not result:
 			return None
 		else:
 			return result	
 
-	def get_ap_degraded_retries(timespan=1, retries_threshold=10):
+	def get_ap_degraded_retries(self, timespan=1, retries_threshold=10):
 		result =  query_data.get_ap_degraded_retries(timespan, retries_threshold)	
 		if not result:
 			return None
 		else:
 			return result	
 
-	def get_all_active_devices_on_channel(chann, timespan=10):
+	def get_all_active_devices_on_channel(self, chann, timespan=10):
 		result =  query_data.get_all_active_devices_on_channel(chann, timespan)	
 		if not result:
 			return None
 		else:
 			return result
 
-	def get_chann_model(timespan, chann):
+	def get_chann_model(self, timespan, chann):
 		'''
 		get the model L0, exp, sigma on a given channel (reference distance d0 = 1m)
 		Args:
@@ -344,7 +344,7 @@ class REMController(modules.ControlApplication):
 		'''
 		return pm_estimation.get_chann_model(timespan, chann)
 
-	def insert_device_location(macaddr, locx, locy, locz, locid, floor, loc_type = 0):
+	def insert_device_location(self, macaddr, locx, locy, locz, locid, floor, loc_type = 0):
 		'''
 		Inserts device location in the database
 		Args:
@@ -357,13 +357,13 @@ class REMController(modules.ControlApplication):
 		device_data = (macaddr, locx, locy, locz, locid, floor, loc_type)
 		insert_data.insert_device_location(data_device)
 
-	def device_init():
+	def device_init(self):
 		'''
 		Sets all devices to inactive
 		'''
 		insert_data.device_init()
 
-	def insert_device_capabilities(macaddr, uuid, capab):
+	def insert_device_capabilities(self, macaddr, uuid, capab):
 		'''
 		Inserts device capabilities in the database
 		Args:
@@ -375,7 +375,7 @@ class REMController(modules.ControlApplication):
 		device_data = (macaddr, uuid, capab_str)
 		insert_data.insert_device_capabilities(device_data)
 
-	def update_device_status(macaddr, status, hw_mode = None, power = None, ssid = None, channel = None, sec_channel = None, apmac = None):
+	def update_device_status(self, macaddr, status, hw_mode = None, power = None, ssid = None, channel = None, sec_channel = None, apmac = None):
 		'''
 		Inserts device status in the database
 		Args:
@@ -391,7 +391,7 @@ class REMController(modules.ControlApplication):
 		device_data = (macaddr, status, hw_mode, power, ssid, channel, sec_channel, apmac)
 		insert_data.update_device_status(device_data)
 
-	def insert_duty_cycle(rmac, dc, chnel):
+	def insert_duty_cycle(self, rmac, dc, chnel):
 		'''
 		Inserts duty cycle information in the database
 		Args:
@@ -402,7 +402,7 @@ class REMController(modules.ControlApplication):
 		dc_data = (rmac, dc*100, datetime.now(), chnel)
 		insert_data.insert_duty_cycle(dc_data)
 
-	def insert_tx_location(tx_mac_address, x_coord, y_coord, global_loc_id, floor, channel, tx_power):
+	def insert_tx_location(self, tx_mac_address, x_coord, y_coord, global_loc_id, floor, channel, tx_power):
 		'''
 		Inserts localized tx information in the database
 		Args:
@@ -416,7 +416,7 @@ class REMController(modules.ControlApplication):
 		location_data = (tx_mac_address, x_coord, y_coord, global_loc_id, floor, datetime.now(), channel, tx_power)
 		insert_data.insert_tx_location(location_data)
 
-	def insert_propagation_model(L0, alpha, sigma, channel):
+	def insert_propagation_model(self, L0, alpha, sigma, channel):
 		'''
 		Inserts propagation model information in the database
 		Args:
@@ -425,7 +425,7 @@ class REMController(modules.ControlApplication):
 		data = (str(L0), str(alpha), str(sigma), 1, datetime.now(), channel) 
 		insert_data.insert_propagation_model(data)
 
-	def insert_rssi_measurement(tx_mac_address, rx_mac_address, rssi, channel):
+	def insert_rssi_measurement(self, tx_mac_address, rx_mac_address, rssi, channel):
 		'''
 		Inserts rssi measurement information in the database
 		Args:
@@ -437,7 +437,7 @@ class REMController(modules.ControlApplication):
 		data = (tx_mac_address, rx_mac_address, rssi, datetime.now(), 'data', 1, channel, 0)
 		insert_data.insert_rssi_measurement(data)
 
-	def insert_global_location(name, locx, locy, locz):
+	def insert_global_location(self, name, locx, locy, locz):
 		'''
 		Inserts global location information in the database
 		Args:
@@ -448,7 +448,7 @@ class REMController(modules.ControlApplication):
 		locid = insert_data.insert_global_location(location_data)
 		return locid
 
-	def insert_ap_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act):
+	def insert_ap_statistics(self, apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act):
 		'''
 		Inserts AP statistics information in the database
 		Args:
@@ -463,7 +463,7 @@ class REMController(modules.ControlApplication):
 		ap_data = (apmac, tot_ret*100, tot_fai*100, tot_tx_thr/1000000, tot_rx_thr/1000000, tot_tx_act*100, tot_rx_act*100, datetime.now())
 		insert_data.insert_ap_statistics(ap_data)
 
-	def insert_link_statistics(txmac, rxmac, rssi, tx_ret, tx_fai, tx_rate, rx_rate, tx_thr, rx_thr, tx_act, rx_act):
+	def insert_link_statistics(self, txmac, rxmac, rssi, tx_ret, tx_fai, tx_rate, rx_rate, tx_thr, rx_thr, tx_act, rx_act):
 		'''
 		Inserts link statistics information in the database
 		Args:
@@ -625,7 +625,6 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			rsp_event = REMRspDutyCycleHeatMap(channel, results)
 			self.send_event(rsp_event)
-
 	
 	@modules.on_event(REMGetEstimatedTXLocation)
 	def serve_estimate_tx_location_event(self, event):
