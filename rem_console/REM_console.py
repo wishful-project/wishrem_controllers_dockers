@@ -56,16 +56,11 @@ class REMConsole(modules.ControlApplication):
 		return remControl
 
 	def main_menu(self):
-		'''
-		The function manages the console application part of the controller.
-		Provides the user several possibilities for interacting with the experiment i.e. active WiFi devices:
-		1) It allows the user to list all active devices in the experiment. 
-		2) It allows the user to configure a specific WiFi device either as an access point, station or monitor device. 
-		'''
 		while (self.running):
 			print("Please choose from the selection:")
-			print("1. List WiFi devices")
-			print("2. Configure WiFi Devices")
+			print("1. WiFi device localization")
+			print("2. Duty cycle calculation")
+			print("3. Path loss model estimation")
 			print("0. Quit")
 			choice = input(" >>  ")
 			if (choice == '0'): 
@@ -105,7 +100,6 @@ class REMConsole(modules.ControlApplication):
 
 				getDCevent = REMGetDutyCycleByArea(chann,10,ux,ul,dx,dy)
 				self.send_event(getDCevent)
-
 
 			elif (choice == '3'): 
 				print("PL:Enter the channel of interest")
