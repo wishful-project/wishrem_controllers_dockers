@@ -24,6 +24,12 @@ COPY . /app/
 
 RUN pip3 install git+https://github.com/uniflex/uniflex@master
 
+RUN pip3 install git+https://github.com/wishful-project/pyre@master
+
+RUN pip3 install git+https://github.com/uniflex/app_discovery_pyre@master
+
 RUN pip3 install git+https://github.com/wishful-project/wishrem_rem_backend@master
+
+RUN pip3 install git+https://github.com/wishful-project/wishrem_rem_events@master
 
 CMD ["uniflex-agent", "--config", "/app/config_console.yaml"]
