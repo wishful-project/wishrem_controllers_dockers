@@ -44,7 +44,7 @@ class REMController(modules.ControlApplication):
 		self.log.info("stop REM control app")
 		self.running = False
 
-	def get_device(self, mac_add):
+	def get_device(self, mac_addr):
 		'''
 		Returs information for a specific device 
 		Args:

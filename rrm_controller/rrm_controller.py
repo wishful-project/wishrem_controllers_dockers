@@ -186,8 +186,9 @@ class RRMController(modules.ControlApplication):
 				degraded_aps = remControl.blocking(True).get_ap_degraded_retries(timeMinutes, self.retries_threshold)
 				#degraded_aps = qd.get_ap_degraded_retries(timeMinutes, self.retries_threshold)
 				self.log.info("Degraded APs: \n{} ".format(degraded_aps))
-				for ap in degraded_aps:
-					self.reconfigure_ap(ap[0])
+				if degraded_aps is not None:
+					for ap in degraded_aps:
+						self.reconfigure_ap(ap[0])
 
 		self.timer.start(self.timeInterval)
 
