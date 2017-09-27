@@ -37,7 +37,7 @@ class REMConsole(modules.ControlApplication):
 		self.log.info("start global REM console controller app")
 		self.running = True
 		mythread = modules.ModuleWorker(self)
-                mythread.add_task(self.main_menu, None)
+		mythread.add_task(self.main_menu, None)
 
 	@modules.on_exit()
 	def my_stop_function(self):
