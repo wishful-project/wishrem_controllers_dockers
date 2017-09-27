@@ -56,7 +56,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 
 	def get_pathloss_model(self, channel):
 		'''
@@ -71,7 +71,7 @@ class REMController(modules.ControlApplication):
 		if result['L0'] != 'none':
 			return result
 		else:
-			return None 
+			return 'None' 
 
 	def get_tx_locations(self, channel, floor, timespan):
 		'''
@@ -87,7 +87,7 @@ class REMController(modules.ControlApplication):
 		result = query_data.get_tx_locations(channel, floor, timespan)
 		
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result 
 
@@ -105,7 +105,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None 
+			return 'None' 
 
 	def get_channel_status_by_area(self, channel, threshold, timespan, ulx=0, uly=1000, drx=1000, dry=0):
 		'''
@@ -122,7 +122,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 		
 	def get_channel_status_by_device(self, channel, rx_add, threshold, timespan):
 		'''
@@ -139,7 +139,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 
 	def get_channel_status_all_by_device(self, rx_add, threshold, timespan):
 		'''
@@ -153,7 +153,7 @@ class REMController(modules.ControlApplication):
 		'''	
 		result = query_data.get_channel_status_all_by_device(rx_add, threshold, timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -168,7 +168,7 @@ class REMController(modules.ControlApplication):
 		'''
 		result = query_data.get_channel_status_all(threshold, timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -185,7 +185,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 
 	def get_duty_cycle_by_area(self, channel, timespan, ulx=0, uly=1000, drx=1000, dry=0):
 		'''
@@ -199,7 +199,7 @@ class REMController(modules.ControlApplication):
 		'''
 		result =  query_data.get_duty_cycle_by_area(channel, timespan, ulx, uly, drx, dry)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -215,7 +215,7 @@ class REMController(modules.ControlApplication):
 		'''
 		result =  query_data.get_duty_cycle_by_device(channel, rx_add, timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -230,7 +230,7 @@ class REMController(modules.ControlApplication):
 		'''
 		result =  query_data.get_duty_cycle_all_channels_by_device(rx_add, timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -244,7 +244,7 @@ class REMController(modules.ControlApplication):
 		'''
 		result =  query_data.get_duty_cycle_all_channels(timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -264,7 +264,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 
 	def estimate_tx_location(self, addr, timespan=60, ulx=0, uly=15, drx=32, dry=0, nx=50, ny=50, nz=50):
 		'''
@@ -281,7 +281,7 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None
+			return 'None'
 
 	def estimate_tx_range(self, addr, timespan=60):
 		'''
@@ -296,40 +296,40 @@ class REMController(modules.ControlApplication):
 		if result is not None:
 			return result
 		else:
-			return None		
+			return 'None'		
 
 	def get_occupied_channels(self):
 		result =  query_data.get_occupied_channels()
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
 	def get_occupied_channels_count(self):	
 		result =  query_data.get_occupied_channels_count()
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result	
 
 	def get_ap_statistics(self, timespan=1):
 		result =  query_data.get_ap_statistics(timespan)
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result	
 
 	def get_ap_degraded_retries(self, timespan=1, retries_threshold=10):
 		result =  query_data.get_ap_degraded_retries(timespan, retries_threshold)	
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result	
 
 	def get_all_active_devices_on_channel(self, chann, timespan=10):
 		result =  query_data.get_all_active_devices_on_channel(chann, timespan)	
 		if not result:
-			return None
+			return 'None'
 		else:
 			return result
 
@@ -487,7 +487,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_device_event(self, event):
 		macaddress = event.macaddress
 		result = self.get_device(macaddress)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDeviceInformationEvent(macaddress, result)
 			self.send_event(rsp_event)
 
@@ -495,7 +495,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_pathloss_model_event(self, event):
 		channel = event.channel
 		result = self.get_pathloss(channel)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspPathlossModel(channel, result)
 			self.send_event(rsp_event)
 
@@ -505,7 +505,7 @@ class REMController(modules.ControlApplication):
 		floor = event.floor
 		timespan = event.timespan
 		result = self.get_tx_locations(channel, floor, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspTransmittersLocations(channel, floor, result)
 			self.send_event(rsp_event)
 
@@ -515,7 +515,7 @@ class REMController(modules.ControlApplication):
 		threshold = event.threshold
 		timespan = event.timespan
 		result = self.get_channel_status(channel, threshold, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspChannelStatus(channel, result)
 			self.send_event(rsp_event)
 
@@ -529,7 +529,7 @@ class REMController(modules.ControlApplication):
 		drx = event.drx
 		dry = event.dry
 		result = self.get_channel_status_by_area(channel, threshold, timespan, ulx, uly, drx, dry)
-		if result is not None:
+		if result != None:
 			rsp_event = REMRspChannelStatusByArea(channel, ulx, uly, drx, dry, result)
 			self.send_event(rsp_event)
 
@@ -540,7 +540,7 @@ class REMController(modules.ControlApplication):
 		timespan = event.timespan
 		rx_addr = event.rx_addr
 		result = self.get_channel_status_by_device(channel, rx_add, threshold, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspChannelStatusByDevice(channel, rx_add, result)
 			self.send_event(rsp_event)
 
@@ -550,7 +550,7 @@ class REMController(modules.ControlApplication):
 		threshold = event.threshold
 		timespan = event.timespan
 		result = self.get_channel_status_all_by_device(rx_add, threshold, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspAllChannelsStatusByDevice(rx_add, result)
 			self.send_event(rsp_event)
 
@@ -559,7 +559,7 @@ class REMController(modules.ControlApplication):
 		threshold = event.threshold
 		timespan = event.timespan
 		result = self.get_channel_status_all(threshold, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspAllChannelsStatus(result)
 			self.send_event(rsp_event)
 
@@ -568,7 +568,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		timespan = event.timespan
 		result = self.get_duty_cycle(channel, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycle(channel, result)
 			self.send_event(rsp_event)
 
@@ -581,7 +581,7 @@ class REMController(modules.ControlApplication):
 		drx = event.drx
 		dry = event.dry
 		result = self.get_duty_cycle_by_area(channel, timespan, ulx, uly, drx, dry)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycleByArea(channel, ulx, uly, drx, dry, result)
 			self.send_event(rsp_event)
 
@@ -591,7 +591,7 @@ class REMController(modules.ControlApplication):
 		rx_add = event.rx_add
 		timespan = event.timespan
 		result = self.get_duty_cycle_by_device(channel, rx_add, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycleByDevice(channel, rx_add, result)
 			self.send_event(rsp_event)
 
@@ -600,7 +600,7 @@ class REMController(modules.ControlApplication):
 		timespan = event.timespan
 		rx_add = event.rx_add
 		result = self.get_duty_cycle_all_channels_by_device(rx_add, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycleAllChannelsByDevice(rx_add, result)
 			self.send_event(rsp_event)
 
@@ -608,7 +608,7 @@ class REMController(modules.ControlApplication):
 	def serve_get_duty_cycle_all_channels_event(self, event):
 		timespan = event.timespan
 		result = self.get_duty_cycle_all_channels(timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycleAllChannels(result)
 			self.send_event(rsp_event)
 
@@ -623,7 +623,7 @@ class REMController(modules.ControlApplication):
 		nx = event.nx
 		ny = event.ny
 		result = self.get_duty_cycle_heat_map(channel, timespan, nx, ny, ulx, uly, drx, dry)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDutyCycleHeatMap(channel, result)
 			self.send_event(rsp_event)
 	
@@ -639,35 +639,35 @@ class REMController(modules.ControlApplication):
 		ny = event.ny
 		nz = event.nz
 		result = self.estimate_tx_location(addr, timespan, ulx, uly, drx, dry, nx, ny, nz)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspEstimatedTXLocation(addr, result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetOccupiedChannels)
 	def serve_get_occupied_channels_event(self, event):
 		result = self.get_occupied_channels()
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspOccupiedChannels(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetOccupiedChannelsCount)
 	def serve_get_occupied_channels_count_event(self, event):
 		result = self.get_occupied_channels_count()
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspOccupiedChannelsCount(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetAllAPStatistics)
 	def serve_get_ap_statistics_event(self, event):
 		result = self.get_ap_statistics(event.timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspAllAPStatistics(result)
 			self.send_event(rsp_event)
 
 	@modules.on_event(REMGetDegradedAPsBasedOnRetries)
 	def serve_get_ap_degraded_retries_event(self, event):
 		result = self.get_ap_degraded_retries(event.timestamp, event.retries_threshold)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspDegradedAPs(results)
 			self.send_event(rsp_event)
 
@@ -676,7 +676,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		timespan = event.timespan
 		result = self.get_all_active_devices_on_channel(channel, timespan)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspAllActiveDevicesOnChannel(channel, result)
 			self.send_event(rsp_event)
 
@@ -685,7 +685,7 @@ class REMController(modules.ControlApplication):
 		channel = event.channel
 		timespan = event.timespan
 		result = self.get_chann_model(timespan, channel)
-		if result is not None:
+		if result != 'None':
 			rsp_event = REMRspPathlossModel(channel, result)
 			self.send_event(rsp_event)
 

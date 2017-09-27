@@ -54,9 +54,11 @@ class RRMController(modules.ControlApplication):
 			#else: remControl.start()
 
 		#dev = qd.get_device(apmac)
-		if dev is not None:
+		if dev != 'None':
 			chan_capab = json.loads(dev['chan_capab'])
-			ocup_chann = np.array(remControl.blocking(True).get_occupied_channels()) # get all ocupied chann
+			arroccupied = remControl.blocking(True).get_occupied_channels()
+			if arroccupied == 'None': arroccupied = []
+			ocup_chann = np.array(arroccupied) # get all ocupied chann
 			#ocup_chann = np.array(qd.get_occupied_channels()) # get all ocupied chann
 
 			chan_list_str = chan_capab.keys()

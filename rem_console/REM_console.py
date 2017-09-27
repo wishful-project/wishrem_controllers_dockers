@@ -97,7 +97,7 @@ class REMConsole(modules.ControlApplication):
 					if remControl.is_running():
 						dev_list = remControl.blocking(True).get_all_active_devices_on_channel(chann,1)
 
-				if dev_list is not None:
+				if dev_list != 'None':
 					print("Select the index of the device of interest")
 					ind = 1
 					for row in dev_list:
@@ -107,7 +107,7 @@ class REMConsole(modules.ControlApplication):
 					print(dev_list[int(devind)-1][0])
 
 					points = remControl.blocking(True).estimate_tx_range(str(dev_list[int(devind)-1][0]), 10)
-					if points is not None:
+					if points != 'None':
 						estimateLocEvent = REMGetEstimatedTXLocation(str(dev_list[int(devind)-1][0]), 10, points['xmin'], points['ymax'], points['xmax'], points['ymin'], 10, 10, 10)
 						self.send_event(estimateLocEvent)
 				else:
