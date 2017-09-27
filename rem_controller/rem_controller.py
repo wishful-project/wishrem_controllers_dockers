@@ -631,7 +631,7 @@ class REMController(modules.ControlApplication):
 	def serve_estimate_tx_location_event(self, event):
 		addr = event.addr
 		timespan = event.timespan
-		uly = event.ulx
+		ulx = event.ulx
 		uly = event.uly
 		drx = event.drx
 		dry = event.dry
