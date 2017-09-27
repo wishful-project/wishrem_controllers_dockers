@@ -383,7 +383,7 @@ class DeviceController(modules.ControlApplication):
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
-				remControl.blocking(False).insert_link_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act)
+				remControl.blocking(False).insert_ap_statistics(apmac, tot_ret, tot_fai, tot_tx_thr, tot_rx_thr, tot_tx_act, tot_rx_act)
 			#else: remControl.start()
 
 		#ap_data = (apmac, tot_ret*100, tot_fai*100, tot_tx_thr/1000000, tot_rx_thr/1000000, tot_tx_act*100, tot_rx_act*100, datetime.now())
