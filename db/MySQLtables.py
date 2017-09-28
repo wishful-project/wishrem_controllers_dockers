@@ -130,7 +130,7 @@ TABLES['link_statistics'] = (
     "  `rx_activity` float NOT NULL,"
     "  `timestamp` datetime NOT NULL,"
     "  PRIMARY KEY (`id`),"
-    "  FOREIGN KEY (`rx_mac_address`) REFERENCES devices(`mac_address`)"
+    "  FOREIGN KEY (`tx_mac_address`) REFERENCES devices(`mac_address`)"
     ") ENGINE=InnoDB")
 
 #cnx = mysql.connector.connect(user='root',password='rem', port='3306', host='localhost')
