@@ -4,6 +4,10 @@ RUN apt-get update && apt-get install -y apt-transport-https
 
 RUN apt-get install -y python3
 
+RUN apt-get install -y python3-numpy
+
+RUN apt-get install -y python3-scipy
+
 RUN apt-get install -y python3-pip
 
 RUN apt-get install -y wget

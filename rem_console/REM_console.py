@@ -91,11 +91,11 @@ class REMConsole(modules.ControlApplication):
 				print("Loc:Enter the channel of interest")
 				chann = input(" >>  ")
 
-				dev_list = None
+				dev_list = 'None'
 				remControl = self.get_rem_controller()
 				if remControl is not None:
 					if remControl.is_running():
-						dev_list = remControl.blocking(True).get_all_active_devices_on_channel(chann, 2)
+						dev_list = remControl.blocking(True).get_all_active_devices_on_channel(chann, 0.5)
 
 				if dev_list != 'None':
 					print("Select the index of the device of interest")
@@ -106,9 +106,9 @@ class REMConsole(modules.ControlApplication):
 					devind = input(" >>  ")
 					print(dev_list[int(devind)-1][0])
 
-					points = remControl.blocking(True).estimate_tx_range(str(dev_list[int(devind)-1][0]), 2)
+					points = remControl.blocking(True).estimate_tx_range(str(dev_list[int(devind)-1][0]), 0.5)
 					if points != 'None':
-						estimateLocEvent = REMGetEstimatedTXLocation(str(dev_list[int(devind)-1][0]), 2, points['xmin'], points['ymax'], points['xmax'], points['ymin'], 10, 10, 10)
+						estimateLocEvent = REMGetEstimatedTXLocation(str(dev_list[int(devind)-1][0]), 0.5, points['xmin'], points['ymax'], points['xmax'], points['ymin'], 10, 10, 10)
 						self.send_event(estimateLocEvent)
 				else:
 					print("no devices or no REM controller")
