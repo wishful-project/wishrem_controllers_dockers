@@ -71,7 +71,7 @@ class DeviceController(modules.ControlApplication):
 						nodeind = int(pnode) - 1
 						print("Make a selection (1 for monitor, 2 for AP, 3 for station)")
 						pmode = input (" >>  ")
-						if pmode.isdigit() and int(pnode) >= 1 and int(pnode) <= 3:
+						if pmode.isdigit() and int(pmode) >= 1 and int(pmode) <= 3:
 							modeind = int(pmode)
 							if modeind == 1:
 								uuid = list(self.mynodes.keys())[nodeind]
