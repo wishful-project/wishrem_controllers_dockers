@@ -46,7 +46,7 @@ class RRMController(modules.ControlApplication):
 		Args:
 			apmac: the MAC address of the access point		
 		'''
-		dev = None
+		dev = 'None'
 		remControl = self.get_rem_controller()
 		if remControl is not None:
 			if remControl.is_running():
@@ -54,7 +54,7 @@ class RRMController(modules.ControlApplication):
 			#else: remControl.start()
 
 		#dev = qd.get_device(apmac)
-		if dev != 'None':
+		if dev != 'None' and 'chan_capab' in dev:
 			chan_capab = json.loads(dev['chan_capab'])
 			arroccupied = remControl.blocking(True).get_occupied_channels()
 			if arroccupied == 'None': arroccupied = []
@@ -73,12 +73,12 @@ class RRMController(modules.ControlApplication):
 			if (len(free_chann) > 0):
 				dc_val = 100			
 				for chann in np.nditer(free_chann):
-					tmp = remControl.blocking(True).get_duty_cycle_heat_map(chann, 1, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
+					tmp = remControl.blocking(True).get_duty_cycle_heat_map(chann, 0.5, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
 					#tmp = qd.get_duty_cycle_heat_map(chann, 1, 1, 1, dev['x_coord'], dev['y_coord'], dev['x_coord'], dev['y_coord'])
 					print(tmp)
 					tmp = tmp[0][2]
 					if tmp in [0, 100]:
-						tmp = remControl.blocking(True).get_duty_cycle(chann, 1) # get the duty cycle for chann
+						tmp = remControl.blocking(True).get_duty_cycle(chann, 0.5) # get the duty cycle for chann
 						#tmp = qd.get_duty_cycle(chann, 1) # get the duty cycle for given chann
 						#print(tmp)
 						if tmp[0] is None:
