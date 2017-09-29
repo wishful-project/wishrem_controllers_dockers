@@ -109,7 +109,7 @@ class RRMController(modules.ControlApplication):
 					retV = 1
 				else:
 					#reconf channel to id=rnd
-					candidate_chann = all_chan[rd.randint(1, len(all_chan))]
+					candidate_chann = all_chan[rd.randint(0, len(all_chan)-1)]
 					retV = 2
 
 			candidate_chann = int(candidate_chann)
